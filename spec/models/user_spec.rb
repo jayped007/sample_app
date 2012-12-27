@@ -28,6 +28,16 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
 
+  it { should respond_to(:admin) }
+  it { should respond_to(:authenticate) }
+  it { should be_valid }
+  it { should_not be_admin }
+
+  describe "with admin attribute set to 'true'" do
+    before { @user.toggle!(:admin) }
+    it { should be_admin }
+  end
+
   describe "when email format is invalid" do
     it "should be invalid" do
       addresses = %w[user@foo,com user_at_foo.org example.user@foo.
