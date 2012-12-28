@@ -11,6 +11,8 @@
 
 class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :password_confirmation
+  has_many :microposts, dependent: :destroy
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   has_secure_password
@@ -18,6 +20,11 @@ class User < ActiveRecord::Base
   #   1. require the presence of the password
   #   2. require that they match
   #   3. authenticate method to compare encrypted password to password_digest
+
+  def feed
+    # This is preliminary. See "Following users" for the full implementation.
+    Micropost.where("user_id = ?", id)
+  end
 
   validates :name,  presence: true, length: { maximum: 50 }
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
